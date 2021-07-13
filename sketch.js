@@ -1,49 +1,55 @@
-var fixedRect;
-var movingRect;
-var fixedRect1;
+  
+
+var wall, thickness;
+var bullet, speed, weight;
 
 function setup() {
-  
-  createCanvas(1200,800); 
-  fixedRect = createSprite(600, 400, 50, 80);
-   fixedRect.shapeColor = "green";
-    fixedRect.debug = true;
-     
-    movingRect = createSprite(400,200,80,30);
-      movingRect.shapeColor = "green"; 
-    movingRect.debug = true;
+  createCanvas(1600,400);
 
-    fixedRect1 = createSprite(900,600,50,50);
- fixedRect1.shapeColor="green";    
-fixedRect1.debug = true;
+thickness=random(22, 83);
+speed=random(22, 55);
+weight=random(30, 52);
 
+ bullet=createSprite(50, 200, 50, 10);
+bullet.velocityX = speed;
+bullet.shapeColor="white";
+
+wall=createSprite(1000, 200, thickness, height/2);
+wall.shapeColor=(80,80,80);
 
 }
 
 function draw() {
-  background("black");  
- movingRect.x=World.mouseX;
- movingRect.y=World.mouseY;
- 
- if(collide(movingRect,fixedRect)){
-   movingRect.shapeColor="red";
-   fixedRect.shapeColor="red";
-  }
-  else if(collide(movingRect,fixedRect1)){
-    movingRect.shapeColor="red";
-    fixedRect1.shapeColor="red";
-  }
-  else{
-  movingRect.shapeColor = "green"; 
-  fixedRect.shapeColor = "green";
-  fixedRect1.shapeColor="green";
-}
- 
- 
+  background(0);  
+
+  
+
+    if(hasCollided(bullet, wall)){
+
+      bullet.velocityX=0;
+      var damage=0.5 * weight * speed * speed/(thickness* thickness* thickness);
+      
+      
+      if(damage>10){
+        bullet.shapeColor=color(225, 0, 0);
+      }
+  
+      if(damage<10){
+        bullet.shapeColor=color(0, 255, 0);
+      }
+    }
   drawSprites();
- 
-
-
-
 }
 
+function hasCollided(Lbullet, Lwall){
+
+bulletRightEdge=Lbullet.x + Lbullet.width;
+wallLeftEdge = Lwall.x;
+
+if(bulletRightEdge>=wallLeftEdge){
+
+  return true;
+}
+
+return false;
+}
